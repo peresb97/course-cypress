@@ -10,12 +10,14 @@ describe('Work with basic elements', () => {
         cy.reload()
     })
 
-    it('Alert', () => {
-        cy.get('#alert').click()
-        cy.on('window:alert', msg => {
-            console.log(msg)
-            expect(msg).to.be.equal('Alert Simples')
-        })
+    it.only('Alert', () => {
+        // cy.get('#alert').click()
+        // cy.on('window:alert', msg => {
+        //     console.log(msg)
+        //     expect(msg).to.be.equal('Alert Simples')
+        // })
+        // EXEMPLO DE USO DO COMMAND
+        cy.clickAlert('#alert', 'Alert Simples')
     })
 
     it('Alert com mock', () => {
