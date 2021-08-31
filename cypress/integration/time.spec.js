@@ -21,14 +21,21 @@ describe('Work with clock', () => {
 
     it.only('Goes to the future', () => {
         cy.get('#buttonTimePassed').click()
-        cy.get('#resultado > span').should('contain', '16303')
-        cy.get('#resultado > span').invoke('text').should('gt', 1630339158213)
+        cy.get('#resultado > span').should('contain', '16304')
+        cy.get('#resultado > span').invoke('text').should('gt', '1630416424400')
 
         cy.clock()
         cy.get('#buttonTimePassed').click()
         cy.get('#resultado > span').invoke('text').should('lte', 0)
-        cy.wait(1000)
+        // cy.wait(5000)
+        // cy.get('#buttonTimePassed').click()
+        // cy.get('#resultado > span').invoke('text').should('lte', 1000)
+
+        cy.tick(5000)
         cy.get('#buttonTimePassed').click()
-        cy.get('#resultado > span').invoke('text').should('lte', 1000)
+        cy.get('#resultado > span').invoke('text').should('gte', 5000)
+        cy.tick(10000)
+        cy.get('#buttonTimePassed').click()
+        cy.get('#resultado > span').invoke('text').should('gte', 15000)
     })
 })
