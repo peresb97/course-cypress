@@ -7,6 +7,7 @@ describe('Should test at a functional level', () => {
     before(() => {
         cy.login('brunodarosaperes1997@gmail.com', 'Senha@1997')
         cy.resetApp()
+        cy.wait(1000)
     })
 
     beforeEach(() => {
@@ -51,7 +52,7 @@ describe('Should test at a functional level', () => {
     })
 
 
-    it('Should get balance', () => {
+    it.only('Should get balance', () => {
         cy.get(loc.MENU.HOME).click()
         cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '534,00')
 
@@ -63,8 +64,9 @@ describe('Should test at a functional level', () => {
         cy.get(loc.MOVIMENTACAO.BTN_SALVAR).click()
         cy.get(loc.MESSAGE).should('contain', 'sucesso')
         
+        cy.wait(1000)
         cy.get(loc.MENU.HOME).click()
-        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '534,00')
+        cy.xpath(loc.SALDO.FN_XP_SALDO_CONTA('Conta para saldo')).should('contain', '4.034,00')
     })
 
     it('Should remove a transaction', () => {
