@@ -35,8 +35,8 @@ Cypress.Commands.add('clickAlert', (locator, message) => {
 
 Cypress.Commands.add('login', (user, password) => {
     cy.visit('https://barrigareact.wcaquino.me/ ')  
-    cy.get(loc.LOGIN.USER).type('brunodarosaperes1997@gmail.com')
-    cy.get(loc.LOGIN.PASSWORD).type('Senha@1997')
+    cy.get(loc.LOGIN.USER).type(user)
+    cy.get(loc.LOGIN.PASSWORD).type(password)
     cy.get(loc.LOGIN.BTN_LOGIN).click()
     cy.get(loc.MESSAGE).should('contain', 'Bem vindo')
 })
@@ -57,6 +57,7 @@ Cypress.Commands.add('getToken', (user, password) => {
         },
     }).its('body.token').should('not.be.empty')
     .then(token => {
+        Cypress.env('token', token)
         return token
     })
 })
@@ -69,4 +70,31 @@ Cypress.Commands.add('resetRest', () => {
             headers: { Authorization: `JWT ${token}` }
         }).its('status').should('be.equal', 200)
     })
+})
+
+Cypress.Commands.add('getContaByName', name => {
+    cy.getToken('brunodarosaperes1997@gmail.com', 'Senha@1997').then(token => {
+        cy.request({
+            method: 'GET',
+            url: '/contas',
+            headers: { Authorization: `JWT ${token}` },
+            qs: {
+                nome: name
+            }
+        }).then(res => {
+            return res.body[0].id
+        })
+    })
+})
+
+Cypress.Commands.overwrite('request', (originalFn, ...options) => {
+    if(options.length === 1){
+        if(Cypress.env('token')){
+            options[0].headers = {
+                Authorization: `JWT ${Cypress.env('token')}`
+            }
+        }
+    }
+
+    return originalFn(...options)
 })
