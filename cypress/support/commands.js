@@ -56,10 +56,10 @@ Cypress.Commands.add('getToken', (user, password) => {
             senha: password
         },
     }).its('body.token').should('not.be.empty')
-    .then(token => {
-        Cypress.env('token', token)
-        return token
-    })
+        .then(token => {
+            Cypress.env('token', token)
+            return token
+        })
 })
 
 Cypress.Commands.add('resetRest', () => {

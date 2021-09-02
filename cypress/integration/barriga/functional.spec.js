@@ -47,6 +47,7 @@ describe('Should test at a functional level', () => {
         cy.get(loc.MOVIMENTACAO.STATUS).click()
         cy.get(loc.MOVIMENTACAO.BTN_SALVAR).click()
         cy.get(loc.MESSAGE).should('contain', 'sucesso')
+        cy.wait(1000)
         cy.get(loc.EXTRATO.LINHAS).should('have.length', 7)
         cy.xpath(loc.EXTRATO.FN_XP_BUSCA_ELEMENTO('Desc', '123')).should('exist')
     })
