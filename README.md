@@ -69,8 +69,3 @@ npm run run --spec cypress/integration/backend.js
 - [x] Testes Funcionais.
 - [x] Testes da API.
 - [x] Testes de interface
-
-<h4 align="center"> 
-	 Status 🚀 Finalizado 
-</h4>
-
