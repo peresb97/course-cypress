@@ -1,4 +1,4 @@
-# curso-cypress
+# course-cypress
 
 - 📚 Course: Testes de aplicações modernas com Cypress
 - 👨‍🏫 Teacher: Fracisco Wagner Costa Aquino
