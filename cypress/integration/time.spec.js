@@ -1,6 +1,6 @@
 /// <reference types="cypress" />
 
-describe('Work with clock', () => {
+describe('Work with time', () => {
     before(() => {
         cy.visit('https://wcaquino.me/cypress/componentes.html')  
     })
@@ -19,9 +19,9 @@ describe('Work with clock', () => {
         cy.get('#resultado > span').should('contain', '15/11/1997')
     })
 
-    it.only('Goes to the future', () => {
+    it('Goes to the future', () => {
         cy.get('#buttonTimePassed').click()
-        cy.get('#resultado > span').should('contain', '16304')
+        cy.get('#resultado > span').should('contain', '16305') // vai dar erro pq o tempo vai passar :/
         cy.get('#resultado > span').invoke('text').should('gt', '1630416424400')
 
         cy.clock()

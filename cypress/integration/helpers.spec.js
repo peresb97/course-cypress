@@ -28,7 +28,7 @@ describe('Helpers...', () => {
         }).should('be.equal', 2)
     })
 
-    it.only('Its...', () => {
+    it('Its...', () => {
         const obj = {nome: 'User', idade: 20}
         cy.wrap(obj).should('have.property', 'nome', 'User')
         cy.wrap(obj).its('nome').should('be.equal', 'User')
@@ -43,7 +43,7 @@ describe('Helpers...', () => {
 
     })
 
-    it.only('Invoke...', () => {
+    it('Invoke...', () => {
         const getValue = () => 1;
         const soma = (a, b) => a + b;
 

@@ -16,6 +16,20 @@ describe('Should test at a functional level', () => {
         // cy.resetApp()
     })
 
+    it('Should test the responsiveness', () => {
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('be.visible')
+        cy.viewport(500, 700)
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('be.not.visible')
+        cy.viewport('iphone-5')
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('be.not.visible')
+        cy.viewport('ipad-2')
+        cy.get('[data-test=menu-home]').should('exist')
+            .and('be.visible')
+    })
+
     it('Should create an account', () => {
         cy.route({
             method: 'POST',
@@ -160,6 +174,61 @@ describe('Should test at a functional level', () => {
         cy.get(loc.MENU.EXTRATO).click()
         cy.xpath(loc.EXTRATO.FN_XP_REMOVER_ELEMENTO('Movimentacao para exclusao')).click()
         cy.get(loc.MESSAGE).should('contain', 'sucesso')
+    })
+
+    it('Should validate data send to create an account', () => {
+        const reqStub = cy.stub()
+        cy.route({
+            method: 'POST',
+            url: '/contas',
+            response: { id: 3, nome: 'Conta de teste', visivel: true, usuario_id: 1 },
+            // onRequest: req => {
+            //     console.log(req)
+            //     expect(req.request.body.nome).to.be.empty
+            //     expect(req.request.headers).to.have.property('Authorization')
+            // }
+            onRequest: reqStub
+        }).as('saveConta')
+
+        cy.acessarMenuConta()
+
+        cy.route({
+            method: 'GET',
+            url: '/contas',
+            response: [
+                {id: 1, nome: 'Carteira' , visivel :true, usuario_id :1 },
+                {id: 2, nome: 'Banco' ,visivel: true,usuario_id: 2},
+                {id: 3, nome: 'Conta de teste' ,visivel: true,usuario_id: 3}
+            ]
+        }).as('contasSave')
+
+        cy.inserirConta('{CONTROL}')
+        // cy.wait('@saveConta').its('request.body.nome').should('not.be.empty')
+        cy.wait('@saveConta').then(() => {
+            console.log(reqStub.args[0][0])
+            expect(reqStub.args[0][0].request.body.nome).to.be.empty
+            expect(reqStub.args[0][0].request.headers).to.have.property('Authorization')
+        })
+        cy.get(loc.MESSAGE).should('contain', 'Conta inserida com sucesso')
+    })
+
+    it('Should test colors', () => {
+        cy.route({
+            method: 'GET',
+            url: '/extrato/**',
+            response: [
+                {"conta":"Conta para movimentacoes","id":726137,"descricao":"Receita paga","envolvido":"AAA","observacao":null,"tipo":"REC","data_transacao":"2021-09-01T03:00:00.000Z","data_pagamento":"2021-09-01T03:00:00.000Z","valor":"-1500.00","status":true,"conta_id":782684,"usuario_id":24631,"transferencia_id":null,"parcelamento_id":null},
+                {"conta":"Conta com movimentacao","id":726138,"descricao":"Receita pendente","envolvido":"BBB","observacao":null,"tipo":"REC","data_transacao":"2021-09-01T03:00:00.000Z","data_pagamento":"2021-09-01T03:00:00.000Z","valor":"-1500.00","status":false,"conta_id":782685,"usuario_id":24631,"transferencia_id":null,"parcelamento_id":null},
+                {"conta":"Conta para saldo","id":726139,"descricao":"Despesa paga","envolvido":"CCC","observacao":null,"tipo":"DESP","data_transacao":"2021-09-01T03:00:00.000Z","data_pagamento":"2021-09-01T03:00:00.000Z","valor":"3500.00","status":true,"conta_id":782686,"usuario_id":24631,"transferencia_id":null,"parcelamento_id":null},
+                {"conta":"Conta para saldo","id":726140,"descricao":"Despesa pendente","envolvido":"DDD","observacao":null,"tipo":"DESP","data_transacao":"2021-09-01T03:00:00.000Z","data_pagamento":"2021-09-01T03:00:00.000Z","valor":"-1000.00","status":false,"conta_id":782686,"usuario_id":24631,"transferencia_id":null,"parcelamento_id":null}
+            ]
+        })
+
+        cy.get(loc.MENU.EXTRATO).click()
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Receita paga')).should('have.class', 'receitaPaga')
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Receita pendente')).should('have.class', 'receitaPendente')
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Despesa paga')).should('have.class', 'despesaPaga')
+        cy.xpath(loc.EXTRATO.FN_XP_LINHA('Despesa pendente')).should('have.class', 'despesaPendente')
     })
 })
 

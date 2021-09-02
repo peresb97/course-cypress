@@ -37,7 +37,7 @@ describe('Esperas', () => {
             .should('contain', 'Item 2')
     })
 
-    it.only('Uso do timeout', () => {
+    it('Uso do timeout', () => {
         //cy.get('#buttonDelay').click()
         //cy.get('#novoCampo').should('exist')
 

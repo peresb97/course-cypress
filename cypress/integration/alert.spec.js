@@ -10,7 +10,7 @@ describe('Work with basic elements', () => {
         cy.reload()
     })
 
-    it.only('Alert', () => {
+    it('Alert', () => {
         // cy.get('#alert').click()
         // cy.on('window:alert', msg => {
         //     console.log(msg)
@@ -62,7 +62,7 @@ describe('Work with basic elements', () => {
         cy.get('#prompt').click()
     })
 
-    it.only('validando mensagens',() => {
+    it('validando mensagens',() => {
         const stub = cy.stub().as('alerta')
         cy.on('window:alert', stub)
         cy.get('#formCadastrar').click()
